@@ -118,7 +118,7 @@ let prepLangobj = async function (newDistinctTweets){
 }
 
 let langdetect = async function (requestobj){ 
-    const url = "http://127.0.0.1:8080/api/language-detection";
+    const url = "https://twit-sentiment.xe.tansanrao.net/api/language-detection";
     requestobj2 = []
     const options = {
     method: "POST",
@@ -132,10 +132,10 @@ let langdetect = async function (requestobj){
     .then((data) => {
         console.log("datatatatatatat1",data);
         for(let i in data){ 
-           if(data[i].is_english = 'true')
+           if(data[i].is_english)
            requestobj2.push({"tweet_text":data[i].tweet_text})
         }
-        if (data.length > 0) {
+        if (requestobj2.length > 0 ) {
             res2 = sentimentAnalysis(res)
         }
     });
@@ -143,7 +143,7 @@ let langdetect = async function (requestobj){
 }
 
 let sentimentAnalysis = function (requestobj){
-    const url = "http://127.0.0.1:8080/api/sentiment-score";
+    const url = "https://twit-sentiment.xe.tansanrao.net/api/sentiment-score";
     const options = {
     method: "POST",
     headers: {
