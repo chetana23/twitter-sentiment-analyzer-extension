@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Twitter sentiment Analysis",
+    "version": "1.0",
+    "description": "Detects English tweets, and calculates the sentiment score of these tweets, and based on the score, it shows three emojis (😊, 😐, ☹️)",
+    "action": {
+        "default_popup": "basic.html"
+      },
+  
+    "icons": {
+      "16": "image/favicon-16x16.png",
+      "32": "image/favicon-32x32.png",
+      "48": "image/apple-touch-icon.png",
+      "128": "image/android-chrome-192x192.png"
+    },
+    "content_scripts": [{
+        "js": ["scripts/content.js"],
+        "matches": ["https://twitter.com/*"]
+      }]
+}
+  

@@ -1,0 +1,7 @@
+Flask==2.2.2
+langdetect==1.0.7
+textblob==0.17.1
+torch==1.13.1
+transformers==4.25.1
+scipy==1.10.0
+Flask-Cors==3.0.10
