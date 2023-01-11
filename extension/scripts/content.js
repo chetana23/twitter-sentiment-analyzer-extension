@@ -143,7 +143,7 @@ let langdetect = async function (requestobj){
 }
 
 let sentimentAnalysis = function (requestobj){
-    const url = "https://regal-skyline-374310.wl.r.appspot.com/vader/api/sentiment-score";
+    const url = "https://regal-skyline-374310.wl.r.appspot.com/api/sentiment-score";
     const options = {
     method: "POST",
     headers: {

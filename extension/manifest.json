@@ -3,7 +3,6 @@
     "name": "Twitter sentiment Analysis",
     "version": "1.0",
     "description": "Detects English tweets, and calculates the sentiment score of these tweets, and based on the score, it shows three emojis (😊, 😐, ☹️)",
-  
     "icons": {
       "16": "image/favicon-16x16.png",
       "32": "image/favicon-32x32.png",

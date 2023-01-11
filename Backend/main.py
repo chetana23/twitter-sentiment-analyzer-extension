@@ -49,7 +49,7 @@ def detectLanguage():
         return "Content type is not supported."
 
 #sentiment analysis
-@app.route('/vader/api/sentiment-score', methods = ['POST'])
+@app.route('/api/sentiment-score', methods = ['POST'])
 def detectSentiment2():
     res = []
     content_type = request.headers.get('Content-Type')
