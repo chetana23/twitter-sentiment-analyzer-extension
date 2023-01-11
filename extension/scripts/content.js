@@ -118,7 +118,7 @@ let prepLangobj = async function (newDistinctTweets){
 }
 
 let langdetect = async function (requestobj){ 
-    const url = "https://twit-sentiment.xe.tansanrao.net/api/language-detection";
+    const url = "https://regal-skyline-374310.wl.r.appspot.com/api/language-detection";
     requestobj2 = []
     const options = {
     method: "POST",
@@ -143,7 +143,7 @@ let langdetect = async function (requestobj){
 }
 
 let sentimentAnalysis = function (requestobj){
-    const url = "https://twit-sentiment.xe.tansanrao.net/api/sentiment-score";
+    const url = "https://regal-skyline-374310.wl.r.appspot.com/vader/api/sentiment-score";
     const options = {
     method: "POST",
     headers: {
@@ -178,7 +178,9 @@ window.addEventListener("scroll", async function () {
             newDistinctTweets[newTweetID] = newParsedTweets[newTweetID];
         }
     }
-    await prepLangobj(newDistinctTweets)
+    if(Object.keys(newDistinctTweets).length>0){
+        await prepLangobj(newDistinctTweets)
+    }
     await domUpdate()
     parsedTweetsGlobal = { ...parsedTweetsGlobal, ...newParsedTweets };
 });

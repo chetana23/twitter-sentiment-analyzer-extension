@@ -16,42 +16,20 @@
 # [START gae_python3_app]
 from flask import Flask, request
 from langdetect import detect
-import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from scipy.special import softmax
 from flask_cors import CORS, cross_origin
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 app = Flask(__name__)
 CORS(app)
 
+sentiment = SentimentIntensityAnalyzer()
+
+
 @app.route('/')
 def hello():
     return 'Hello World!'
-
-# load model and tokenizer
-roberta = "cardiffnlp/twitter-roberta-base-sentiment"
-model = AutoModelForSequenceClassification.from_pretrained(roberta)
-tokenizer = AutoTokenizer.from_pretrained(roberta)
-
-labels = ['Negative', 'Neutral', 'Positive']
-
-# pre-process tweet and get rid of any @mention and url http
-def process(tweet:str):
-    tweet_words = []
-    for word in tweet.split(' '):
-        if word.startswith('@') and len(word) > 1:
-            word = '@user'
-        
-        elif word.startswith('http'):
-            word = "http"
-        tweet_words.append(word)
-
-    tweet_proc = " ".join(tweet_words)
-    encoded_tweet = tokenizer(tweet_proc, return_tensors='pt')
-    return encoded_tweet
-
 
 #language detecting API
 @app.route('/api/language-detection', methods = ['POST'])
@@ -70,26 +48,28 @@ def detectLanguage():
     else:
         return "Content type is not supported."
 
-#sentiment analysing API
-@app.route('/api/sentiment-score', methods = ['POST'])
-def detectSentiment3():
+#sentiment analysis
+@app.route('/vader/api/sentiment-score', methods = ['POST'])
+def detectSentiment2():
     res = []
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         data = request.json
         for i in data:
-            encoded_tweet = process(i['tweet_text'])
-            output = model(**encoded_tweet)
-            scores = output[0][0].detach().numpy()
-            scores = softmax(scores)
-            senti = {}
             mapVal = {}
-            maxVal = 0
-            for val in range(len(scores)):
-                if scores[val] > maxVal:
-                    maxVal = scores[val]
-                    mapVal['detected_mood'] = labels[val].upper() 
-                senti[labels[val]] = str(scores[val])
+            senti = {}
+            val = sentiment.polarity_scores(i['tweet_text'])
+            print(val)
+            mood = val['compound']
+            if mood >= 0.05:
+                mapVal['detected_mood'] = "POSITIVE"
+            elif mood <= -0.05:
+                mapVal['detected_mood'] = "NEGATIVE"
+            else:
+                mapVal['detected_mood'] = "NEUTRAL"
+            senti["positive"] = val['pos']
+            senti["negative"] = val['neg']
+            senti["neutral"] = val['neu']
             mapVal["sentiment_score"] = senti
             mapVal['tweet_text'] = i['tweet_text']
             res.append(mapVal)
